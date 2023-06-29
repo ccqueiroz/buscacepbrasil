@@ -1,0 +1,12 @@
+{
+  "name": "buscacepsbrasil",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Caio Queiroz",
+  "license": "MIT",
+  "devDependencies": {
+    "@caiocezarqueiroz/eslint-config": "^1.0.22",
+    "eslint": "^8.43.0",
+    "ts-jest": "^29.1.0"
+  }
+}
