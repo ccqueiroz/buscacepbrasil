@@ -8,4 +8,8 @@ typings/
 # Node.js dependency directory
 node_modules/
 
+ui-debug.log
+
+firebaseConfig.json
+
 serviceAccountKey.json
