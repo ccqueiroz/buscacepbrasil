@@ -10,11 +10,7 @@ export class FireBaseError extends FireBaseErrorAdapter {
   }
 
   adapterError(error: FireBaseErrorInterface): ApiError {
-    const err: ApiError = {
-      message: error?.code,
-      statusCode: 400,
-      name: error?.code,
-    };
+    const err = new ApiError(error?.code, 400);
     return err;
   }
 
