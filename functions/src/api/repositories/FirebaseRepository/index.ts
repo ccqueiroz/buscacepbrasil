@@ -32,7 +32,13 @@ export class FireBaseRepository extends ProviderRepository {
         .get()
         .then((snapshot) => {
           const data = snapshot.data();
-          if (!data) throw new Error('Dados não encontrados!');
+          if (!data) {
+            const error: FireBaseErrorInterface = {
+              code: 'Dados não encontrados!',
+              message: 'Dados não encontrados!',
+            };
+            return this.firebaseError.adapterError(error);
+          }
           return { ...data } as CepInterface;
         })
         .catch((onrejected: FireBaseErrorInterface) =>
