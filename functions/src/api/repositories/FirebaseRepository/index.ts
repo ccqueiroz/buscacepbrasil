@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import { cepRegionsByFirstDigitCep } from '../../models/cepRegions/index';
 import { CepInterface } from '../../models/cep';
-import { RepositoryBase } from '../../models/repositories/RepositoryBase';
+import { ProviderRepository } from '../../models/repositories/ProviderRepository';
 import {
   FireBaseErrorAdapter,
   FireBaseErrorInterface,
@@ -12,9 +12,10 @@ type Constructor = {
   firebaseError: FireBaseErrorAdapter;
 };
 
-export class FireBaseRepository extends RepositoryBase {
-  private db;
-  private firebaseError;
+export class FireBaseRepository extends ProviderRepository {
+  private db: firebase.firestore.Firestore;
+  private firebaseError: FireBaseErrorAdapter;
+
   constructor({ client, firebaseError }: Constructor) {
     super();
     this.db = firebase.firestore(client);
