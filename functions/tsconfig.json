@@ -9,7 +9,9 @@
     "target": "es2017",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "lib": ["es6"]
+    "lib": ["es6"],
+    "allowJs": true
   },
+  "files": ["node_modules/typescript/lib/lib.es6.d.ts"],
   "compileOnSave": true
 }
