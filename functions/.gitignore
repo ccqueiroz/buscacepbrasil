@@ -10,6 +10,8 @@ node_modules/
 
 ui-debug.log
 
+firebase-debug.log
+
 firebaseConfig.json
 
 serviceAccountKey.json
