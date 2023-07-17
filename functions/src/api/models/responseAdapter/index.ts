@@ -5,3 +5,7 @@ export interface ResponseAdapter {
   error?: string;
   data?: CepInterface;
 }
+
+export interface ResponseSetCacheAdapter {
+  success: boolean;
+}
