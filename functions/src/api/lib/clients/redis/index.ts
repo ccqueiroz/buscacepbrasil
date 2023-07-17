@@ -1,6 +1,6 @@
-import { createClient } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 import configRedis from './configRedis.json';
 
-const clientRedis = createClient(configRedis);
+const clientRedis: RedisClientType = createClient(configRedis);
 
 export { clientRedis };

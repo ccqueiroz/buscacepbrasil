@@ -1,4 +1,4 @@
-import { ResponseSetCacheAdapter } from '../../responseAdapter';
+import { ResponseSetCacheAdapter } from '../../responseAdapter/responseSetCacheAdapter';
 
 export abstract class ProviderRepositoryCache {
   abstract getData<T>(key: string): Promise<T | null>;
@@ -7,4 +7,6 @@ export abstract class ProviderRepositoryCache {
     data: T,
     ttl: number,
   ): Promise<ResponseSetCacheAdapter>;
+  abstract connectServer(): Promise<void>;
+  abstract disconnectServer(): Promise<void>;
 }
