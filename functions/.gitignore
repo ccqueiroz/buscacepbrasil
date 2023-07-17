@@ -15,3 +15,5 @@ firebase-debug.log
 firebaseConfig.json
 
 serviceAccountKey.json
+
+configRedis.json
