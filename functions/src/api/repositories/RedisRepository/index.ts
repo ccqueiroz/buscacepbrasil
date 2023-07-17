@@ -1,6 +1,6 @@
 import { RedisClientType } from 'redis';
 import { ProviderRepositoryCache } from '../../models/repositories/ProviderRepositoryCache';
-import { ResponseSetCacheAdapter } from '../../models/responseAdapter';
+import { ResponseSetCacheAdapter } from '../../models/responseAdapter/responseSetCacheAdapter';
 
 type Constructor = {
   client: RedisClientType;
@@ -11,6 +11,14 @@ export class RedisRepository extends ProviderRepositoryCache {
   constructor({ client }: Constructor) {
     super();
     this.client = client;
+  }
+
+  async connectServer(): Promise<void> {
+    await this.client.connect();
+  }
+
+  async disconnectServer(): Promise<void> {
+    await this.client.disconnect();
   }
 
   async getData<T>(key: string): Promise<T | null> {
