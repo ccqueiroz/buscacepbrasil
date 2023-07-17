@@ -1,5 +1,5 @@
 import { cepRegionsByFirstDigitCep } from '../../models/cepRegions';
-import { ResponseAdapter } from '../../models/responseAdapter';
+import { ResponseAdapter } from '../../models/responseAdapter/responseHTTPAdapter';
 import { RepositoryBase } from '../../repositories/RepositoryBase';
 import { cepMask } from '../../utils/cepMask';
 import { getRegionCep } from '../../utils/getRegionCep';
