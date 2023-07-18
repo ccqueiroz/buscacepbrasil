@@ -6,4 +6,4 @@ lib/**/*.js.map
 
 cepsDataBase
 
-modelo.md
+.DS_Store
