@@ -17,3 +17,5 @@ firebaseConfig.json
 serviceAccountKey.json
 
 configRedis.json
+
+.DS_Store
