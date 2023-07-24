@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "buscaceps-9a274"
-  }
+  },
+  "targets": {
+    "buscaceps-9a274": {
+      "hosting": {
+        "proxy": [
+          "buscaceps-9a274"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
