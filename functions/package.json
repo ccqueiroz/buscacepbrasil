@@ -10,7 +10,8 @@
     "logs": "firebase functions:log",
     "create-workspace-vscode": "node node_modules/@caiocezarqueiroz/eslint-config/settingsGenerator/vscode/index.js",
     "create-editor-config": "node node_modules/@caiocezarqueiroz/eslint-config/settingsGenerator/editorconfig/index.js",
-    "create-prettier-config": "node node_modules/@caiocezarqueiroz/eslint-config/settingsGenerator/prettier/index.js"
+    "create-prettier-config": "node node_modules/@caiocezarqueiroz/eslint-config/settingsGenerator/prettier/index.js",
+    "deploy-proxy": "firebase deploy --only functions:proxy,hosting"
   },
   "engines": {
     "node": "18"
