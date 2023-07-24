@@ -4,8 +4,8 @@ import { RepositoryBaseCache } from '../../repositories/RepositoryBaseCache';
 export class ServiceCacheRateLimit {
   private repositoryCache: RepositoryBaseCache;
   private keyIp: string | null = null;
-  private _RATE_LIMIT = 10;
-  private TTL = 20;
+  private _RATE_LIMIT = 3;
+  private TTL = 10;
   constructor(repositoryCache: RepositoryBaseCache) {
     this.repositoryCache = repositoryCache;
   }
