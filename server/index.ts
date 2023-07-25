@@ -1,4 +1,4 @@
-import { app } from '../functions/src/index';
+import { app } from '../api/index';
 
 const _PORT = 8888;
 
