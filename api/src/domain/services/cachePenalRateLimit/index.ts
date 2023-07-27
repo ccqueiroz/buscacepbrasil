@@ -14,7 +14,9 @@ export class ServiceCachePenalRateLimit {
   }
   private buidKeyIp(ip: string) {
     if (!ip) this.keyIp = null;
-    this.keyIp = `penal-rate-limit-${ip?.replace(/::ffff:/g, '')}`;
+    const key = `penal-rate-limit-${ip?.replace(/::ffff:/g, '')}`;
+    if (key === 'penal-rate-limit-undefined') this.keyIp = null;
+    this.keyIp = key;
   }
 
   async getPenalRateLimiting(

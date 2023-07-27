@@ -20,7 +20,9 @@ export class ServiceCacheRateLimit {
 
   private buidKeyIp(ip?: string) {
     if (!ip) this.keyIp = null;
-    this.keyIp = `rate-limit-${ip?.replace(/::ffff:/g, '')}`;
+    const key = `rate-limit-${ip?.replace(/::ffff:/g, '')}`;
+    if (key === 'rate-limit-undefined') this.keyIp = null;
+    this.keyIp = key;
   }
 
   async rateLimit(ip?: string): Promise<ResponseRateLimitAdapter> {
