@@ -15,6 +15,7 @@ import { RepositoryBase } from '../domain/repositories/RepositoryBase';
 import { RepositoryBaseCache } from '../domain/repositories/RepositoryBaseCache';
 import { MiddlewareRateLimit } from '../domain/middlewares/rateLimit';
 import { MiddlewareAcceptOnlyGet } from '../domain/middlewares/acceptOnlyGET';
+import { MiddlewareIpControll } from '../domain/middlewares/ipControll';
 
 type Constructor = {
   providerRepository: ProviderRepository;
@@ -41,10 +42,16 @@ export class BootStrap {
     const middlewareRateLimit = new MiddlewareRateLimit(
       this.baseCacheRepository,
     );
+    const middlewareIpControll = new MiddlewareIpControll();
 
     this.app.use(
       async (request: Request, response: Response, next: NextFunction) =>
         await middlewareAcceptOnlyGet.execute(request, response, next),
+    );
+
+    this.app.use(
+      async (request: Request, response: Response, next: NextFunction) =>
+        await middlewareIpControll.execute(request, response, next),
     );
 
     this.app.use(
