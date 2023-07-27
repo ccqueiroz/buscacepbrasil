@@ -1,11 +1,11 @@
 import firebase from 'firebase';
-import { cepRegionsByFirstDigitCep } from '../../models/cepRegions/index';
-import { CepInterface } from '../../models/cep';
-import { ProviderRepository } from '../../models/repositories/ProviderRepository';
+import { cepRegionsByFirstDigitCep } from '../../../domain/models/cepRegions/index';
+import { CepInterface } from '../../../domain/models/cep';
+import { ProviderRepository } from '../../../domain/models/repositories/ProviderRepository';
 import {
   FireBaseErrorAdapter,
   FireBaseErrorInterface,
-} from '../../models/errors/firebaseError';
+} from '../../../domain/models/errors/firebaseError';
 
 type Constructor = {
   client: firebase.app.App;
