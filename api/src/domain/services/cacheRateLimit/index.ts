@@ -3,6 +3,7 @@ import {
   ResponseRateLimitAdapter,
 } from '../../models/responseAdapter/responseRateLimitAdapter';
 import { RepositoryBaseCache } from '../../repositories/RepositoryBaseCache';
+import { normalizeIp } from '../../utils/normalizeIp';
 import { ServiceCachePenalRateLimit } from '../cachePenalRateLimit';
 
 export class ServiceCacheRateLimit {
@@ -20,9 +21,11 @@ export class ServiceCacheRateLimit {
 
   private buidKeyIp(ip?: string) {
     if (!ip) this.keyIp = null;
-    const key = `rate-limit-${ip?.replace(/::ffff:/g, '')}`;
-    if (key === 'rate-limit-undefined') this.keyIp = null;
-    this.keyIp = key;
+    else {
+      const key = `rate-limit-${normalizeIp(ip)}`;
+      if (key === 'rate-limit-undefined') this.keyIp = null;
+      this.keyIp = key;
+    }
   }
 
   async rateLimit(ip?: string): Promise<ResponseRateLimitAdapter> {

@@ -3,6 +3,7 @@ import {
   ResponseRateLimitAdapter,
 } from '../../models/responseAdapter/responseRateLimitAdapter';
 import { RepositoryBaseCache } from '../../repositories/RepositoryBaseCache';
+import { normalizeIp } from '../../utils/normalizeIp';
 
 export class ServiceCachePenalRateLimit {
   private repositoryCache: RepositoryBaseCache;
@@ -14,9 +15,11 @@ export class ServiceCachePenalRateLimit {
   }
   private buidKeyIp(ip: string) {
     if (!ip) this.keyIp = null;
-    const key = `penal-rate-limit-${ip?.replace(/::ffff:/g, '')}`;
-    if (key === 'penal-rate-limit-undefined') this.keyIp = null;
-    this.keyIp = key;
+    else {
+      const key = `penal-rate-limit-${normalizeIp(ip)}`;
+      if (key === 'penal-rate-limit-undefined') this.keyIp = null;
+      this.keyIp = key;
+    }
   }
 
   async getPenalRateLimiting(
