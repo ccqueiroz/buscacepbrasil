@@ -1,6 +1,6 @@
 import { RedisClientType } from 'redis';
-import { ProviderRepositoryCache } from '../../models/repositories/ProviderRepositoryCache';
-import { ResponseSetCacheAdapter } from '../../models/responseAdapter/responseSetCacheAdapter';
+import { ProviderRepositoryCache } from '../../../domain/models/repositories/ProviderRepositoryCache';
+import { ResponseSetCacheAdapter } from '../../../domain/models/responseAdapter/responseSetCacheAdapter';
 
 type Constructor = {
   client: RedisClientType;

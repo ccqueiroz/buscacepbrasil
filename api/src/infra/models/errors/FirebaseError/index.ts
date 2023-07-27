@@ -1,4 +1,4 @@
-import { ApiError } from '../../../errors/ApiErrors';
+import { ApiError } from '../../../../domain/errors/ApiErrors';
 
 export type FireBaseErrorInterface = {
   code: string;

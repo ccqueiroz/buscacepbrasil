@@ -1,8 +1,8 @@
+import { ApiError } from '../../domain/errors/ApiErrors';
 import {
   FireBaseErrorAdapter,
   FireBaseErrorInterface,
-} from '../../models/errors/firebaseError';
-import { ApiError } from '../ApiErrors';
+} from '../models/errors/FirebaseError';
 
 export class FireBaseError extends FireBaseErrorAdapter {
   constructor() {

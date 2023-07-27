@@ -1,32 +1,30 @@
 import { cepRegionsByFirstDigitCep } from '../../models/cepRegions';
+import { AbstractRepositoryBase } from '../../models/repositories/AbstractRepositoryBase';
 import { ResponseAdapter } from '../../models/responseAdapter/responseHTTPAdapter';
-import { RepositoryBase } from '../../repositories/RepositoryBase';
 import { cepMask } from '../../utils/cepMask';
 import { getRegionCep } from '../../utils/getRegionCep';
 
 export class ServiceGetCep {
-  private cep: string;
-  private repositoryBase: RepositoryBase;
+  private repositoryBase: AbstractRepositoryBase;
   private cepRegion:
     | (typeof cepRegionsByFirstDigitCep)[keyof typeof cepRegionsByFirstDigitCep]
     | undefined;
 
-  constructor(repositoryBase: RepositoryBase, cep?: string) {
-    this.cep = cep ?? '';
+  constructor(repositoryBase: AbstractRepositoryBase) {
     this.repositoryBase = repositoryBase;
   }
 
-  private getRegionCep() {
-    const cepRegion = getRegionCep(this.cep);
+  private getRegionCep(cep: string) {
+    const cepRegion = getRegionCep(cep);
     this.cepRegion = cepRegion;
   }
 
-  async getCep(): Promise<ResponseAdapter> {
-    this.getRegionCep();
+  async getCep(cep?: string): Promise<ResponseAdapter> {
+    this.getRegionCep(cep ?? '');
     try {
       if (!this.cepRegion) throw new Error('Cep inválido!');
 
-      const cep = this.cep.replace(/\D/g, '');
+      cep = cep?.replace(/\D/g, '') ?? '';
       const response = await this.repositoryBase.getCep(this.cepRegion, cep);
 
       if (response instanceof Error) {
