@@ -9,4 +9,5 @@ export abstract class ProviderRepositoryCache {
   ): Promise<ResponseSetCacheAdapter>;
   abstract connectServer(): Promise<void>;
   abstract disconnectServer(): Promise<void>;
+  abstract providerIsAlreadyConected(): boolean;
 }

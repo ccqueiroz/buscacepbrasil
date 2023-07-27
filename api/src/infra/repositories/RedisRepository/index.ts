@@ -21,6 +21,10 @@ export class RedisRepository extends ProviderRepositoryCache {
     await this.client.disconnect();
   }
 
+  providerIsAlreadyConected(): boolean {
+    return this.client.isReady;
+  }
+
   async getData<T>(key: string): Promise<T | null> {
     const response = await this.client.get(key);
 
