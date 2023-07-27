@@ -5,7 +5,7 @@ import { ProviderRepository } from '../../../domain/models/repositories/Provider
 import {
   FireBaseErrorAdapter,
   FireBaseErrorInterface,
-} from '../../../domain/models/errors/firebaseError';
+} from '../../models/errors/FirebaseError';
 
 type Constructor = {
   client: firebase.app.App;
