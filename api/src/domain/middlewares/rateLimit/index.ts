@@ -19,9 +19,11 @@ export class MiddlewareRateLimit {
     response: ResponseInfra,
     next: NextFunctionInfra,
   ) {
-    const { ip } = request;
+    const { ipControll } = request;
 
-    const responseRateLimit = await this.serviceCacheRateLimit.rateLimit(ip);
+    const responseRateLimit = await this.serviceCacheRateLimit.rateLimit(
+      ipControll,
+    );
 
     if (responseRateLimit.code !== 200) {
       return response.status(responseRateLimit.code).send({
