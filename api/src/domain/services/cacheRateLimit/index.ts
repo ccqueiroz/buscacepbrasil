@@ -1,13 +1,21 @@
-import { ResponseRateLimitAdapter } from '../../models/responseAdapter/responseRateLimitAdapter';
+import {
+  ResponsePenalRateLimitAdapter,
+  ResponseRateLimitAdapter,
+} from '../../models/responseAdapter/responseRateLimitAdapter';
 import { RepositoryBaseCache } from '../../repositories/RepositoryBaseCache';
+import { ServiceCachePenalRateLimit } from '../cachePenalRateLimit';
 
 export class ServiceCacheRateLimit {
   private repositoryCache: RepositoryBaseCache;
+  private serviceCachePenalRateLimit: ServiceCachePenalRateLimit;
   private keyIp: string | null = null;
   private _RATE_LIMIT = 5;
-  private TTL = 10;
+  private TTL = 10; //10 segundos
   constructor(repositoryCache: RepositoryBaseCache) {
     this.repositoryCache = repositoryCache;
+    this.serviceCachePenalRateLimit = new ServiceCachePenalRateLimit(
+      repositoryCache,
+    );
   }
 
   private buidKeyIp(ip?: string) {
@@ -17,27 +25,42 @@ export class ServiceCacheRateLimit {
 
   async rateLimit(ip?: string): Promise<ResponseRateLimitAdapter> {
     this.buidKeyIp(ip);
+    try {
+      if (!this.repositoryCache.providerIsAlreadyConected()) {
+        await this.repositoryCache.connectServer();
+      }
 
-    await this.repositoryCache.connectServer();
+      if (!this.keyIp)
+        return { code: 400, message: 'Ip do usuário não identificado.' };
 
-    if (!this.keyIp)
-      return { code: 400, message: 'Ip do usuário não identificado.' };
+      const requestPenalRateLimit =
+        await this.serviceCachePenalRateLimit.getPenalRateLimiting(this.keyIp);
 
-    const requestCount =
-      Number((await this.repositoryCache.getData(this.keyIp)) || 0) + 1;
+      if (Object.prototype.hasOwnProperty.call(requestPenalRateLimit, 'code')) {
+        return requestPenalRateLimit as ResponseRateLimitAdapter;
+      }
 
-    const setRateLimit = await this.repositoryCache.setData(
-      this.keyIp,
-      requestCount,
-      this.TTL,
-    );
+      const requestCount =
+        Number((await this.repositoryCache.getData(this.keyIp)) || 0) + 1;
 
-    this.repositoryCache.disconnectServer();
+      const setRateLimit = await this.repositoryCache.setData(
+        this.keyIp,
+        requestCount,
+        this.TTL,
+      );
 
-    if (!setRateLimit.success) throw new Error('Deu ruim para salvar no redis');
+      if (!setRateLimit.success)
+        throw new Error('Falha ao estabelecer conexão com o banco.');
 
-    if (requestCount > this._RATE_LIMIT)
-      return { code: 429, message: 'Taxa limite de requisições excedida.' };
-    else return { code: 200, message: 'Taxa requisições dentro do limite.' };
+      if (requestCount > this._RATE_LIMIT) {
+        await this.serviceCachePenalRateLimit.setPenalRateLimiting(
+          requestPenalRateLimit as ResponsePenalRateLimitAdapter,
+        );
+        return { code: 429, message: 'Taxa limite de requisições excedida.' };
+      } else
+        return { code: 200, message: 'Taxa requisições dentro do limite.' };
+    } finally {
+      this.repositoryCache.disconnectServer();
+    }
   }
 }
