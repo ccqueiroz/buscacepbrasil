@@ -15,6 +15,10 @@ export abstract class AbstractRepositoryBaseCache {
     await this.provider.disconnectServer();
   }
 
+  providerIsAlreadyConected() {
+    return this.provider.providerIsAlreadyConected();
+  }
+
   async getData<T>(key: string): Promise<T | null> {
     return await this.provider.getData<T>(key);
   }
