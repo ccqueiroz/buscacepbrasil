@@ -14,6 +14,7 @@ Informações disponíveis para acesso via API:
 + cidade
 + estado
 + uf
++ endereço Postal
 
 ## URL de acesso
 Para realizar consultas de endereçamento utilize: `https://apigetcep.cloud/:cep`, onde `":cep"` deverá ser a numeração do cep que deseja buscar as informações.
