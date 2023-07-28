@@ -6,4 +6,5 @@ export interface CepInterface {
   cidade: string | null;
   estado: string | null;
   uf: string | null;
+  enderecoPostal?: string;
 }

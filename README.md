@@ -55,7 +55,8 @@ Por questões de segurança, todas as requisições serão feitas através do pr
             "complemento": null,
             "cidade": "Palmas",
             "logradouro": "Quadra ACSU NO 40 Rua NS A",
-            "estado": "Tocantins"
+            "estado": "Tocantins",
+            "enderecoPostal": "Quadra ACSU NO 40 Rua NS A, Plano Diretor Norte, 77001-219, Palmas/TO"
         }
     }
 ```

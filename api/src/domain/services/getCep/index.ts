@@ -4,6 +4,7 @@ import { AbstractRepositoryBase } from '../../models/repositories/AbstractReposi
 import { ResponseAdapter } from '../../models/responseAdapter/responseHTTPAdapter';
 import { cepMask } from '../../utils/cepMask';
 import { getRegionCep } from '../../utils/getRegionCep';
+import { ServiceBuildFullAddress } from '../buildFullAddress';
 
 export class ServiceGetCep {
   private repositoryBase: AbstractRepositoryBase;
@@ -31,18 +32,19 @@ export class ServiceGetCep {
       if (response instanceof Error) {
         throw new ApiError(response?.message, response?.statusCode ?? 400);
       }
-
+      const enderecoPostal = new ServiceBuildFullAddress(response).execute();
       return {
         success: true,
         data: {
           ...response,
           cep: cepMask(response.cep),
+          enderecoPostal,
         },
         code: 200,
       };
     } catch (error) {
       const err = error as unknown as ApiError;
-      return { success: false, error: err.message, code: err.statusCode };
+      return { success: false, error: err.message, code: err?.statusCode };
     }
   }
 }
