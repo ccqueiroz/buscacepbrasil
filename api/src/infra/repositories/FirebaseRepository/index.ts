@@ -6,6 +6,7 @@ import {
   FireBaseErrorAdapter,
   FireBaseErrorInterface,
 } from '../../models/errors/FirebaseError';
+import { ApiError } from '../../../domain/errors/ApiErrors';
 
 type Constructor = {
   client: firebase.app.App;
@@ -24,7 +25,7 @@ export class FireBaseRepository extends ProviderRepository {
   async getCep(
     region: (typeof cepRegionsByFirstDigitCep)[keyof typeof cepRegionsByFirstDigitCep],
     cep: string,
-  ): Promise<CepInterface | Error> {
+  ): Promise<CepInterface | ApiError> {
     try {
       const response = await this.db
         .collection(region)
@@ -36,6 +37,7 @@ export class FireBaseRepository extends ProviderRepository {
             const error: FireBaseErrorInterface = {
               code: 'Dados não encontrados!',
               message: 'Dados não encontrados!',
+              statusCode: 404,
             };
             return this.firebaseError.adapterError(error);
           }
@@ -46,11 +48,11 @@ export class FireBaseRepository extends ProviderRepository {
         );
 
       if (response instanceof Error) {
-        throw new Error(response?.message);
+        throw new ApiError(response?.message, response?.statusCode);
       }
       return response;
     } catch (error) {
-      return error as Error;
+      return error as ApiError;
     }
   }
 }

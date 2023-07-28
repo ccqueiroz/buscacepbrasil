@@ -13,11 +13,17 @@ export class ControllerGetCep {
   }
 
   public async execute(request: RequestInfra, response: ResponseInfra) {
-    const { params } = request;
-    const { cep } = params;
+    try {
+      const { params } = request;
+      const { cep } = params;
 
-    const responseCep = await this.serviceGetCep.getCep(cep);
+      const responseCep = await this.serviceGetCep.getCep(cep);
+      const code = responseCep?.code ?? 200;
+      delete responseCep?.code;
 
-    return response.send(responseCep);
+      return response.status(code).send(responseCep);
+    } catch (error) {
+      return response.status(500).send((error as unknown as Error)?.message);
+    }
   }
 }

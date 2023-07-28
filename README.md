@@ -31,9 +31,10 @@ Requisições para a API devem seguir os padrões:
 | `200` | Requisição executada com sucesso (success).|
 | `400` | Erros de validação ou os campos informados não existem no sistema.|
 | `404` | Registro pesquisado não encontrado (Not found).|
-| `405` | Método não implementado.|
+| `405` | Método não permitido.|
 | `422` | Dados informados estão fora do escopo definido para o campo.|
 | `429` | Número máximo de requisições atingido. (*aguarde alguns segundos e tente novamente*)|
+| `500` | Erro interno do servidor.|
 
 ## Limites (Rate Limiting)
 Existe o limite de `30` requisições por minuto por aplicação/usuário, onde é possível realizar até `5` consultas a cada `10` segundos.
@@ -57,6 +58,14 @@ Por questões de segurança, todas as requisições serão feitas através do pr
         }
     }
 ```
++ Response 4xx ou 500 (application/json)
+```
+    {
+        "error": *,
+        "success": false
+    }
+```
+Onde * é correspondente à messagem relativa ao erro.
 
 ### Autor
 

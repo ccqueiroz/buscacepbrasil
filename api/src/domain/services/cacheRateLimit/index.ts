@@ -1,3 +1,4 @@
+import { ApiError } from '../../errors/ApiErrors';
 import {
   ResponsePenalRateLimitAdapter,
   ResponseRateLimitAdapter,
@@ -36,7 +37,7 @@ export class ServiceCacheRateLimit {
       }
 
       if (!this.keyIp)
-        return { code: 400, message: 'Ip do usuário não identificado.' };
+        return { code: 422, message: 'Ip do usuário não identificado.' };
 
       const requestPenalRateLimit =
         await this.serviceCachePenalRateLimit.getPenalRateLimiting(this.keyIp);
@@ -55,7 +56,7 @@ export class ServiceCacheRateLimit {
       );
 
       if (!setRateLimit.success)
-        throw new Error('Falha ao estabelecer conexão com o banco.');
+        throw new ApiError('Falha ao estabelecer conexão com o banco.', 500);
 
       if (requestCount > this._RATE_LIMIT) {
         await this.serviceCachePenalRateLimit.setPenalRateLimiting(
@@ -64,8 +65,12 @@ export class ServiceCacheRateLimit {
         return { code: 429, message: 'Taxa limite de requisições excedida.' };
       } else
         return { code: 200, message: 'Taxa requisições dentro do limite.' };
+    } catch (error) {
+      return { code: 500, message: (error as unknown as Error)?.message };
     } finally {
-      this.repositoryCache.disconnectServer();
+      if (this.repositoryCache.providerIsAlreadyConected()) {
+        this.repositoryCache.disconnectServer();
+      }
     }
   }
 }

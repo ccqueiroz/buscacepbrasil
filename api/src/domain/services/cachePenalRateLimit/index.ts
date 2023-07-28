@@ -1,3 +1,4 @@
+import { ApiError } from '../../errors/ApiErrors';
 import {
   ResponsePenalRateLimitAdapter,
   ResponseRateLimitAdapter,
@@ -26,30 +27,34 @@ export class ServiceCachePenalRateLimit {
     ip: string,
   ): Promise<ResponsePenalRateLimitAdapter | ResponseRateLimitAdapter> {
     this.buidKeyIp(ip);
-    if (!this.repositoryCache.providerIsAlreadyConected())
-      return {
-        code: 400,
-        message: 'Falha ao estabelecer conexão com o banco.',
-      };
-    if (!this.keyIp)
-      return { code: 400, message: 'Ip do usuário não identificado.' };
+    try {
+      if (!this.repositoryCache.providerIsAlreadyConected())
+        return {
+          code: 500,
+          message: 'Falha ao estabelecer conexão com o banco.',
+        };
+      if (!this.keyIp)
+        return { code: 422, message: 'Ip do usuário não identificado.' };
 
-    const requestPenalRateLimiting: number | null =
-      await this.repositoryCache.getData(this.keyIp);
+      const requestPenalRateLimiting: number | null =
+        await this.repositoryCache.getData(this.keyIp);
 
-    if (!requestPenalRateLimiting)
+      if (!requestPenalRateLimiting)
+        return {
+          key: this.keyIp,
+          count: 0,
+        };
+
+      if (requestPenalRateLimiting > this._RATE_LIMIT)
+        return { code: 429, message: 'Penalidade por excesso de requisições.' };
+
       return {
         key: this.keyIp,
-        count: 0,
+        count: requestPenalRateLimiting,
       };
-
-    if (requestPenalRateLimiting > this._RATE_LIMIT)
-      return { code: 429, message: 'Penalidade por excesso de requisições.' };
-
-    return {
-      key: this.keyIp,
-      count: requestPenalRateLimiting,
-    };
+    } catch (error) {
+      return { code: 500, message: (error as unknown as Error)?.message };
+    }
   }
 
   async setPenalRateLimiting(
@@ -63,7 +68,7 @@ export class ServiceCachePenalRateLimit {
       );
     } catch (error) {
       this.repositoryCache.disconnectServer();
-      throw new Error('Falha ao estabelecer conexão com o banco.');
+      throw new ApiError('Falha ao estabelecer conexão com o banco.', 500);
     }
   }
 }

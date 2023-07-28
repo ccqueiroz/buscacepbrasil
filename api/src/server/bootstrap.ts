@@ -65,11 +65,15 @@ export class BootStrap {
   }
 
   private setupBootStrap() {
-    this.app.set('x-powered-by', false);
-    this.app.use(cors({ origin: true }));
-    this.app.use(json());
-    this.setupMiddlewares();
-    this.setupRoutes();
+    try {
+      this.app.set('x-powered-by', false);
+      this.app.use(cors({ origin: true }));
+      this.app.use(json());
+      this.setupMiddlewares();
+      this.setupRoutes();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public getInstance() {

@@ -1,3 +1,4 @@
+import { ApiError } from '../../../errors/ApiErrors';
 import { CepInterface } from '../../cep';
 import { cepRegionsByFirstDigitCep } from '../../cepRegions';
 import { ProviderRepository } from '../ProviderRepository';
@@ -12,7 +13,7 @@ export abstract class AbstractRepositoryBase extends ProviderRepository {
   async getCep(
     region: (typeof cepRegionsByFirstDigitCep)[keyof typeof cepRegionsByFirstDigitCep],
     cep: string,
-  ): Promise<CepInterface | Error> {
+  ): Promise<CepInterface | ApiError> {
     return await this.provider.getCep(region, cep);
   }
 }
