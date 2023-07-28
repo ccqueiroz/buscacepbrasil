@@ -17,7 +17,9 @@ export class ControllerGetCep {
     const { cep } = params;
 
     const responseCep = await this.serviceGetCep.getCep(cep);
+    const code = responseCep?.code ?? 200;
+    delete responseCep?.code;
 
-    return response.send(responseCep);
+    return response.status(code).send(responseCep);
   }
 }
