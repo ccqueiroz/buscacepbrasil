@@ -44,6 +44,7 @@ Por questões de segurança, todas as requisições serão feitas através do pr
 ### Listar dados de endereçamento [GET /:cep]
 
 + Response 200 (application/json)
+    - Para o exemplo: https://apigetcep.cloud/77001219
 ```
     {
         "success": true,
