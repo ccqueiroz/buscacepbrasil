@@ -1,3 +1,4 @@
+import { ApiError } from '../../errors/ApiErrors';
 import {
   ResponsePenalRateLimitAdapter,
   ResponseRateLimitAdapter,
@@ -28,11 +29,11 @@ export class ServiceCachePenalRateLimit {
     this.buidKeyIp(ip);
     if (!this.repositoryCache.providerIsAlreadyConected())
       return {
-        code: 400,
+        code: 500,
         message: 'Falha ao estabelecer conexão com o banco.',
       };
     if (!this.keyIp)
-      return { code: 400, message: 'Ip do usuário não identificado.' };
+      return { code: 422, message: 'Ip do usuário não identificado.' };
 
     const requestPenalRateLimiting: number | null =
       await this.repositoryCache.getData(this.keyIp);
@@ -63,7 +64,7 @@ export class ServiceCachePenalRateLimit {
       );
     } catch (error) {
       this.repositoryCache.disconnectServer();
-      throw new Error('Falha ao estabelecer conexão com o banco.');
+      throw new ApiError('Falha ao estabelecer conexão com o banco.', 500);
     }
   }
 }
