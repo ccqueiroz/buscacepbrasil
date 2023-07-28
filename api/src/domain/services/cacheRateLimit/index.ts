@@ -65,8 +65,12 @@ export class ServiceCacheRateLimit {
         return { code: 429, message: 'Taxa limite de requisições excedida.' };
       } else
         return { code: 200, message: 'Taxa requisições dentro do limite.' };
+    } catch (error) {
+      return { code: 500, message: (error as unknown as Error)?.message };
     } finally {
-      this.repositoryCache.disconnectServer();
+      if (this.repositoryCache.providerIsAlreadyConected()) {
+        this.repositoryCache.disconnectServer();
+      }
     }
   }
 }
